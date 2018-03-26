@@ -28,7 +28,7 @@ int main()
       height = b;
       array[i][0] = base;
       array[i][1] = height;
-      cout << "triangle " << array[i][0] << " " << array[i][1] << " " << (array[i][0] * array[i][1]) / 2 << endl;
+      printf("triangle %.2f %.2f \t%.2f\n", array[i][0], array[i][1], (array[i][0] * array[i][1]) / 2);
     }
     else if (shape == "rectangle")
     {
@@ -37,14 +37,14 @@ int main()
       side2 = b;
       array[i][0] = side1;
       array[i][1] = side2;
-      cout << "rectangle " << array[i][0] << " " << array[i][1] << " " << (array[i][0] * array[i][1]) << endl;
+      printf("rectangle %.2f %.2f \t%.2f\n", array[i][0], array[i][1], (array[i][0] * array[i][1]));
     }
     else
     {
       in >> a;
       radius = a;
       array[i][0] = radius;
-      cout << "circle " << array[i][0] << "      " << (array[i][0] * array[i][0] * 3.14) <<  endl;
+      printf("circle %.2f \t\t%.2f\n", array[i][0], (array[i][0] * array[i][0] * 3.14));
     }
 
   }
