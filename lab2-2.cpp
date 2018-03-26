@@ -4,15 +4,15 @@ using namespace std;
 const int m = 2;
 const int n = 8;
 
-void transpose(int aArray[m + 1][n + 1], int bArray[m + 1][n + 1]);
+int aArray[m + 1][n + 1] = {};
+int bArray[m + 1][n + 1] = {};
+
+void transpose(int aArray[][n + 1], int bArray[][n + 1]);
 
 int main()
 {
   ifstream in;
   int row, col, value, i;
-
-  int aArray[m + 1][n + 1];
-  int bArray[m + 1][n + 1];
 
   in.open("lab2-1.txt");
 
@@ -20,13 +20,13 @@ int main()
   {
     in >> row >> col >> value;
 
-    aArray[0][i] = row;
-    aArray[1][i] = col;
-    aArray[2][i] = value;
+    aArray[i][0] = row;
+    aArray[i][1] = col;
+    aArray[i][2] = value;
 
-    cout << aArray[0][i] << " " << aArray[1][i] << " " << aArray[2][i] << endl;
+    cout << aArray[i][0] << " " << aArray[i][1] << " " << aArray[i][2] << endl;
+
   }
-
   cout << "\n";
 
   transpose(aArray, bArray);
@@ -34,7 +34,7 @@ int main()
   return 0;
 }
 
-void transpose(int aArray[m + 1][n + 1], int bArray[m + 1][n + 1])
+void transpose(int aArray[][n + 1], int bArray[][n + 1])
 {
   int i, j, currentb;
 
@@ -47,7 +47,7 @@ void transpose(int aArray[m + 1][n + 1], int bArray[m + 1][n + 1])
     currentb = 1;
     for (i = 0; i < aArray[0][1]; i++)
     {
-      for (j = 0; j <= aArray[0][2]; j++)
+      for (j = 1; j < aArray[0][2] + 1; j++)
       {
         if (aArray[j][1] == i)
         {
@@ -61,6 +61,6 @@ void transpose(int aArray[m + 1][n + 1], int bArray[m + 1][n + 1])
   }
   for (int u = 0; u < 9; u++)
   {
-    cout << bArray[0][u] << " " << bArray[1][u] << " " << bArray[2][u] << endl;
+    cout << bArray[u][0] << " " << bArray[u][1] << " " << bArray[u][2] << endl;
   }
 }
