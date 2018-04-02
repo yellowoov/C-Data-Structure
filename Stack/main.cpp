@@ -1,14 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include "stack.h"
+#include "stack.cpp"
 
 using namespace std;
 
 int main()
 {
   Stack s1;
-  int stack[Stack_Size];
-  int top;
+  top = -1;
 
   s1.push(10);
   s1.push(20);

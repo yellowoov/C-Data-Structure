@@ -1,14 +1,7 @@
 #include "stack.h"
+using namespace std;
 
-extern int top;
-extern int stack[];
-
-void Stack::create_stack()
-{
-  top = -1;
-}
-
-int Stack::push(int val)
+void Stack::push(int val)
 {
   stack[++top] = val;
 }
@@ -37,4 +30,4 @@ void Stack::displayStack()
     cout << stack[sp--] << " ";
   }
   cout << endl;
-}
+};
