@@ -1,8 +1,10 @@
 const int Stack_Size = 4;
+int top;
 class Stack
 {
+  private:
+    int stack[Stack_Size];
   public:
-    void create_stack();
     void push(int val);
     int pop();
     int isEmpty();
