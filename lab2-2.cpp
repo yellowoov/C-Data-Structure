@@ -1,66 +1,53 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
-const int m = 2;
-const int n = 8;
+const int m = 1;
+const int n = 6;
 
-int aArray[m + 1][n + 1] = {};
-int bArray[m + 1][n + 1] = {};
 
-void transpose(int aArray[][n + 1], int bArray[][n + 1]);
+double array[m + 1][n + 1] = {};
 
 int main()
 {
   ifstream in;
-  int row, col, value, i;
+  in.open("lab2-2.txt");
 
-  in.open("lab2-1.txt");
+  string shape;
+  int a, b;
+  double base, height;
+  double side1, side2;
+  double radius;
 
-  for (i = 0; i < 9; i++)
+  for (int i = 0; i < 7; i++)
   {
-    in >> row >> col >> value;
-
-    aArray[i][0] = row;
-    aArray[i][1] = col;
-    aArray[i][2] = value;
-
-    cout << aArray[i][0] << " " << aArray[i][1] << " " << aArray[i][2] << endl;
-
-  }
-  cout << "\n";
-
-  transpose(aArray, bArray);
-
-  return 0;
-}
-
-void transpose(int aArray[][n + 1], int bArray[][n + 1])
-{
-  int i, j, currentb;
-
-  bArray[0][0] = aArray[0][1];
-  bArray[0][1] = aArray[0][0];
-  bArray[0][2] = aArray[0][2];
-
-  if (aArray[0][2] > 0)
-  {
-    currentb = 1;
-    for (i = 0; i < aArray[0][1]; i++)
+    in >> shape;
+    if (shape == "triangle")
     {
-      for (j = 1; j < aArray[0][2] + 1; j++)
-      {
-        if (aArray[j][1] == i)
-        {
-          bArray[currentb][0] = aArray[j][1];
-          bArray[currentb][1] = aArray[j][0];
-          bArray[currentb][2] = aArray[j][2];
-          currentb++;
-        }
-      }
+      in >> a >> b;
+      base = a;
+      height = b;
+      array[i][0] = base;
+      array[i][1] = height;
+      printf("triangle %.2f %.2f \t%.2f\n", array[i][0], array[i][1], (array[i][0] * array[i][1]) / 2);
     }
+    else if (shape == "rectangle")
+    {
+      in >> a >> b;
+      side1 = a;
+      side2 = b;
+      array[i][0] = side1;
+      array[i][1] = side2;
+      printf("rectangle %.2f %.2f \t%.2f\n", array[i][0], array[i][1], (array[i][0] * array[i][1]));
+    }
+    else
+    {
+      in >> a;
+      radius = a;
+      array[i][0] = radius;
+      printf("circle %.2f \t\t%.2f\n", array[i][0], (array[i][0] * array[i][0] * 3.14));
+    }
+
   }
-  for (int u = 0; u < 9; u++)
-  {
-    cout << bArray[u][0] << " " << bArray[u][1] << " " << bArray[u][2] << endl;
-  }
+  return 0;
+
 }
