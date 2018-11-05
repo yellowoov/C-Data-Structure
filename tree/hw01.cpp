@@ -11,7 +11,7 @@ typedef struct node
 }node;
 
 node* insertBST(node* root, int data); // 이진검색트리 노드 추가
-void deleteBST(node* root, int data); // 이진검색트리 노드 삭제
+node* deleteBST(node* root, int data); // 이진검색트리 노드 삭제
 int height(node* root); // 트리의 높이 세기
 node* maxNode(node* root); // 최댓값노드 찾기
 node* minNode(node* root); // 최솟값노드 찾기
@@ -25,7 +25,7 @@ node* insertBST(node* root, int data)
   node* q = NULL;
   q = searchParentBST(root, data, q, p);
 
-  node* n;
+  node* n = NULL;
 
   n = (node*)malloc(sizeof(node));
   n->data = data;
@@ -42,7 +42,7 @@ node* insertBST(node* root, int data)
   return root;
 }
 
-void deleteBST(node* root, int data)
+node* deleteBST(node* root, int data)
 {
   node* p = NULL; // 삭제할 노드
   node* q = NULL; // 삭제할 노드의 부모 노드
@@ -59,16 +59,17 @@ void deleteBST(node* root, int data)
     p = q;
 
   if (p == NULL)
-    return;
+    return NULL;
 
   if (q == NULL)
   {
     free(root);
     root = NULL;
-    return;
+    return NULL;
   }
 
   if (p->left == NULL && p->right == NULL)
+    // 삭제할 노드의 차수가 0인 경우 (리프 노드)
   {
     if (p->data == q->data)
       p = NULL;
@@ -78,10 +79,12 @@ void deleteBST(node* root, int data)
         q->left = NULL;
       else
         q->right = NULL;
+      p = NULL;
     }
   }
 
   else if ((p->right != NULL && p->left == NULL) || (p->left != NULL && p->right == NULL))
+    // 삭제할 노드의 차수가 1인 경우
   {
     if (p->left != NULL && p->right == NULL)
     {
@@ -89,6 +92,7 @@ void deleteBST(node* root, int data)
         q->left = p->left;
       else
         q->right = p->left;
+      p = NULL;
     }
 
     else
@@ -97,10 +101,11 @@ void deleteBST(node* root, int data)
         q->left = p->right;
       else
         q->right = p->right;
+      p = NULL;
     }
   }
 
-  else if (p->left != NULL && p->right != NULL)
+  else
     // 삭제할 노드의 차수가 2인 경우
   {
     node* r = NULL; // 최대, 최소 저장 노드
@@ -133,6 +138,7 @@ void deleteBST(node* root, int data)
         flag = "RIGHT";
       }
     }
+
     p->data = r->data;
 
     if (flag == "LEFT")
@@ -140,6 +146,7 @@ void deleteBST(node* root, int data)
     else if (flag == "RIGHT")
       deleteBST(p->right, r->data);
   }
+  return q;
 }
 
 node* searchParentBST(node* root, int data, node* q, node* p)
@@ -203,7 +210,7 @@ int noNodes(node* root)
   {
     return 0;
   }
-	return noNodes(root->left) + noNodes(root->right) + 1;
+	return 1 + noNodes(root->left) + noNodes(root->right);
 }
 
 void InOrder(node* root)
