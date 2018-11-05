@@ -10,7 +10,7 @@ typedef struct node
   struct node* right;
 }node;
 
-void insertBST(node* root, int data); // 이진검색트리 노드 추가
+node* insertBST(node* root, int data); // 이진검색트리 노드 추가
 void deleteBST(node* root, int data); // 이진검색트리 노드 삭제
 int height(node* root); // 트리의 높이 세기
 node* maxNode(node* root); // 최댓값노드 찾기
@@ -19,24 +19,13 @@ int noNodes(node* root); // 노드의 수 세기
 void InOrder(node* root); // InOrder 수행
 node* searchParentBST(node* root, int data, node* q, node* p); // 부모 노드 찾기
 
-void insertBST(node* root, int data)
+node* insertBST(node* root, int data)
 {
   node* p = NULL;
   node* q = NULL;
   q = searchParentBST(root, data, q, p);
 
   node* n;
-
-  while (p != NULL)
-  {
-    if (data == p->data)
-      return;
-    q = p;
-    if (data < p->data)
-      p = p->left;
-    else
-      p = p->right;
-  }
 
   n = (node*)malloc(sizeof(node));
   n->data = data;
@@ -50,7 +39,7 @@ void insertBST(node* root, int data)
   else
     q->right = n;
 
-  return;
+  return root;
 }
 
 void deleteBST(node* root, int data)
@@ -74,6 +63,7 @@ void deleteBST(node* root, int data)
 
   if (q == NULL)
   {
+    free(root);
     root = NULL;
     return;
   }
@@ -81,7 +71,7 @@ void deleteBST(node* root, int data)
   if (p->left == NULL && p->right == NULL)
   {
     if (p->data == q->data)
-      free(p);
+      p = NULL;
     else
     {
       if (q->left == p)
@@ -93,7 +83,7 @@ void deleteBST(node* root, int data)
 
   else if ((p->right != NULL && p->left == NULL) || (p->left != NULL && p->right == NULL))
   {
-    if (p->left != NULL)
+    if (p->left != NULL && p->right == NULL)
     {
       if (q->left == p)
         q->left = p->left;
@@ -119,16 +109,12 @@ void deleteBST(node* root, int data)
       // 왼쪽 서브트리의 높이가 더 큰 경우
     {
       r = maxNode(p->left);
-      // p->data = r->data;
-      // p->left = deleteBST(p->left, p->data);
       flag = "LEFT";
     }
     else if (height(p->left) < height(p->right))
       // 오른쪽 서브트리의 높이가 더 큰 경우
     {
       r = minNode(p->right);
-      // p->data = r->data;
-      // p->right = deleteBST(p->right, p->data);
       flag = "RIGHT";
     }
     else if (height(p->left) == height(p->right))
@@ -138,16 +124,12 @@ void deleteBST(node* root, int data)
         // 왼쪽 서브트리의 노드 갯수가 더 많거나 같은 경우
       {
         r = maxNode(p->left);
-        // p->data = r->data;
-        // p->left = deleteBST(p->left, p->data);
         flag = "LEFT";
       }
       else if (noNodes(p->left) < noNodes(p->right))
         // 오른쪽 서브트리의 노드 갯수가 더 많은 경우
       {
         r = minNode(p->right);
-        // p->data = r->data;
-        // p->right = deleteBST(p->right, p->data);
         flag = "RIGHT";
       }
     }
@@ -155,7 +137,7 @@ void deleteBST(node* root, int data)
 
     if (flag == "LEFT")
       deleteBST(p->left, r->data);
-    else
+    else if (flag == "RIGHT")
       deleteBST(p->right, r->data);
   }
 }
@@ -239,7 +221,7 @@ int main()
   node* root = NULL;
   int data = 0;
 
-  insertBST(root, 8); InOrder(root); cout << endl;
+  root = insertBST(root, 8); InOrder(root); cout << endl;
   insertBST(root, 18); InOrder(root); cout << endl;
   insertBST(root, 11); InOrder(root); cout << endl;
   insertBST(root, 5); InOrder(root); cout << endl;
@@ -272,8 +254,10 @@ int main()
   deleteBST(root, 19); InOrder(root); cout << endl;
   deleteBST(root, 20); InOrder(root); cout << endl;
 
+  free(root);
   root = NULL;
-  insertBST(root, 8); InOrder(root); cout << endl;
+
+  root = insertBST(root, 8); InOrder(root); cout << endl;
   insertBST(root, 18); InOrder(root); cout << endl;
   insertBST(root, 11); InOrder(root); cout << endl;
   insertBST(root, 5); InOrder(root); cout << endl;
