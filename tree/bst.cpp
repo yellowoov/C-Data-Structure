@@ -187,6 +187,60 @@ void drawBSTree(treenode* root, int level)
   }
 }
 
+int height(treenode* root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	int h_left = height(root->left);
+	int h_right = height(root->right);
+
+	int result = 0;
+	return 1 + (h_left > h_right ? h_left : h_right);
+}
+
+int noNodes(treenode* root)
+{
+  if (root == NULL)
+  {
+    return 0;
+  }
+	return noNodes(root->left) + noNodes(root->right) + 1;
+}
+
+int maxNode(treenode* root)
+{
+  if (root == NULL)
+  {
+    return 0;
+  }
+  else if (root->right == NULL)
+  {
+    return root->data;
+  }
+  else
+  {
+    return maxNode(root->right);
+  }
+}
+
+int minNode(treenode* root)
+{
+  if (root == NULL)
+  {
+    return 0;
+  }
+  else if (root->left == NULL)
+  {
+    return root->data;
+  }
+  else
+  {
+    return minNode(root->left);
+  }
+}
+
 int main()
 {
 	int data = 0;
@@ -206,7 +260,10 @@ int main()
 			break;
 		insertnode(root, data);
 	}
-  drawBSTree(root, 1);
+  drawBSTree(root, 1); noNodes(root);
+	cout << maxNode(root) << " " << minNode(root) << endl;
+	cout << noNodes(root) << endl;
+	cout << height(root) << endl;
 
   cout << "삭제하고자 하는 노드 데이터 : ";
   cin >> data;

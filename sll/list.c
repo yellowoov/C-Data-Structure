@@ -67,7 +67,6 @@ void InsertDB()
    }
    printf("등록 되었습니다.\n");
    count += 1;
-   save();
 }
 
 void DeleteDB()
@@ -94,7 +93,6 @@ void DeleteDB()
    }
    printf("삭제되었습니다\n");
    count -= 1;
-   save();
 }
 
 void SearchDB()
@@ -183,12 +181,20 @@ void PrintDB()
 
 void ExitDB()
 {
-   printf("종료 메뉴를 선택했습니다.\n");
+  save();
+  printf("종료 메뉴를 선택했습니다.\n");
 }
 
 void save()
 {
-   FILE *fp = fopen("c:\\temp\\Tel_DB.txt", "a+");
+   FILE *fp = fopen("Tel_DB.txt", "a");
+
+   if (fp == NULL)
+   {
+     printf("open failed\n");
+     return;
+   }
+
    int i;
    for (i = 0; i < count; i++)//배열을 차례대로
       fprintf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n" , e[i].name, e[i].number, e[i].address);//파일에 저장
@@ -198,14 +204,18 @@ void save()
 
 void load()
 {
-   FILE *fp = fopen("c:\\temp\\Tel_DB.txt", "r");  //오픈할 파일의 포인터를 할당
-   count = 0; //파일에서 한줄 읽어올때마나 값을 증가시켜 총 레코드 갯수를 확인할 목적으로 사용되는변수
-   while (1) //일단 무한루프로 만들고
+   FILE *fp = fopen("Tel_DB.txt", "r+");  //오픈할 파일의 포인터를 할당
+
+   if (fp == NULL)
    {
-      if (fscanf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n" , e[count].name, e[count].number, e[count].address) == EOF)
-         break;//파일에서 읽어 옵니다. //if문에서 지정한 파일에서 값을 읽어오다가 화일의 끝(EOF)가되면 break문에 의해 while루프를 탈출
-      count++;//데이타 갯수를 카운트
+     printf("open failed\n");
+     fp = fopen("Tel_DB.txt", "w");
+     return;
    }
+
+   for (int i = 0; i < count; i++)
+    fscanf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n" , e[i].name, e[i].number, e[i].address);
+
    fclose(fp);  //사용할 파일을 오픈했으면 반드시 사용후에 닫아주어야 함
 }
 
