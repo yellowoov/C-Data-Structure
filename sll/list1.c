@@ -56,6 +56,7 @@ void InsertDB()
   temp->next = NULL;
 
   printf("등록 되었습니다.\n");
+  save();
 }
 
 void DeleteDB()
@@ -83,6 +84,7 @@ void DeleteDB()
     prev = temp;
     temp = temp->next;
   }
+  save();
 }
 
 void SearchDB()
@@ -179,32 +181,33 @@ void ExitDB() {
 }
 
 
-// void save()
-// {
-//    FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "w");
-//
-//    temp = head;
-//    while (temp != NULL)
-//    {
-//       fprintf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", temp->name, temp->number, temp->address);
-//       temp = temp->next;
-//    }
-//    fclose(fp);
-// }
-//
-// void load()
-// {
-//    FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "a+");
-//    count = 0;
-//    temp = head;
-//    while (temp != NULL)
-//    {
-//       fscanf(fp, "Name : %s\t/\tTel : %s\t/\tAddress : %s\n", temp->name, temp->number, temp->address);
-//       temp = temp->next;
-//       count++;
-//    }
-//    fclose(fp);
-// }
+void save()
+{
+   FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "a+");
+
+   Person *temp = head;
+   temp = temp->next;
+   while (temp != NULL)
+   {
+      fprintf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", temp->name, temp->number, temp->address);
+      temp = temp->next;
+   }
+   fclose(fp);
+}
+
+void load()
+{
+   FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "r+");
+
+   Person *temp = head;
+   temp = temp->next;
+   while (temp != NULL)
+   {
+      fscanf(fp, "Name : %s\t/\tTel : %s\t/\tAddress : %s\n", temp->name, temp->number, temp->address);
+      temp = temp->next;
+   }
+   fclose(fp);
+}
 
 int PrintMenu()
 {
