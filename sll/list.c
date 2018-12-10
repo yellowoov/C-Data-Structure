@@ -93,7 +93,6 @@ void InsertDB() {
    getchar();
    scanf("%[^\n]s\n", New_Person->name);
 
-
    printf("Input Tel Number : ");
    getchar();
    scanf("%[^\n]s\n", New_Person->number);
@@ -107,6 +106,9 @@ void InsertDB() {
    tail->next = NULL;
 
    printf("등록 되었습니다.\n");
+
+   count += 1;
+   save();
 }
 
 void DeleteDB() {

@@ -47,7 +47,7 @@ void InsertDB()
   scanf("%[^\n]s\n", temp->address);
 
   tail->next = temp;
-  temp = tail;
+  tail = temp;
   temp->next = NULL;
 
   printf("등록 되었습니다.\n");
