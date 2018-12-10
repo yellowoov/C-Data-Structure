@@ -1,17 +1,20 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define MAX 100
 #define NAME_LEN 20
 #define TEL_LEN 20
 #define ADDR_LEN 70
 
-struct Person
+typedef struct Person
 {
    char name[NAME_LEN];
    char number[TEL_LEN];
    char address[ADDR_LEN];
-};
+
+   struct Person *next;
+}Person;
 struct Person e[MAX];
 int count = 0;
 
@@ -23,6 +26,46 @@ void PrintDB();
 void ExitDB();
 void save();
 void load();
+Person *New_Node(void);
+Person *head, *tail, *New_Person;
+
+int main()
+{
+   head = New_Node();
+   tail = head;
+
+   load();
+
+   while (1)
+   {
+
+      int num = 0;
+      num = PrintMenu();
+
+      switch (num)
+      {
+      case 1:
+         InsertDB();
+         break;
+      case 2:
+         DeleteDB();
+         break;
+      case 3:
+         SearchDB();
+         break;
+      case 4:
+         PrintDB();
+         break;
+      case 5:
+         ExitDB();
+         return 0;
+         break;
+      default:
+         printf("다시 입력하세요.[1~5]\n");
+         break;
+      }
+   }
+}
 
 int PrintMenu()
 {
@@ -41,62 +84,56 @@ int PrintMenu()
       return num;
 }
 
-void InsertDB()
-{
+void InsertDB() {
+   New_Person = New_Node();
    printf("[ INSERT ]\n");
 
    printf("Input Name : ");
-   for (int n = count; n < MAX; n++) {
-      getchar();
-      scanf("%[^\n]s", e[n].name);
-      break;
-   }
+   getchar();
+   scanf("%[^\n]s\n", New_Person->name);
+
 
    printf("Input Tel Number : ");
-   for (int t = count; t < MAX; t++) {
-      getchar();
-      scanf("%[^\n]s", e[t].number);
-      break;
-   }
+   getchar();
+   scanf("%[^\n]s\n", New_Person->number);
 
    printf("Input Address : ");
-   for (int a = count; a < MAX; a++) {
-      getchar();
-      scanf("%[^\n]s", e[a].address);
-      break;
-   }
+   getchar();
+   scanf("%[^\n]s\n", New_Person->address);
+
+   tail->next = New_Person;
+   tail = New_Person;
+   tail->next = NULL;
+
    printf("등록 되었습니다.\n");
+
    count += 1;
+   save();
 }
 
-void DeleteDB()
-{
-   int i;
+void DeleteDB() {
    char input[NAME_LEN];
 
    printf("[ Remove ]\n");
    printf("Input Name for Removing : ");
-   getchar();
    scanf("%[^\n]s", input);
 
-   for (i = 0; i < MAX; i++)
+   New_Person = head;
+   while (New_Person != NULL)
    {
-      if (!strcmp(e[i].name, input))
+      if (New_Person->name == input)
       {
-         for (; i < count; i++)
-         {
-            strcpy(e[i].name, e[i + 1].name);
-            strcpy(e[i].number, e[i + 1].number);
-            strcpy(e[i].address, e[i + 1].address);
-         }
+
       }
+      New_Person = New_Person->next;
    }
+
    printf("삭제되었습니다\n");
    count -= 1;
+   save();
 }
 
-void SearchDB()
-{
+void SearchDB() {
    int choice;
 
    printf("[ Search ]\n");
@@ -169,86 +206,48 @@ void SearchDB()
    }
 }
 
-void PrintDB()
-{
+void PrintDB() {
    printf("[ Print All Data ]\n");
-
-   for (int i = 0; i < count; i++)
+   New_Person = head;
+   while (New_Person != NULL)
    {
-      printf("Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", e[i].name, e[i].number, e[i].address);
+      printf("Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", New_Person->name, New_Person->number, New_Person->address);
+      New_Person = New_Person->next;
    }
 }
 
-void ExitDB()
-{
-  save();
-  printf("종료 메뉴를 선택했습니다.\n");
+void ExitDB() {
+   printf("종료 메뉴를 선택했습니다.\n");
 }
 
 void save()
 {
-   FILE *fp = fopen("Tel_DB.txt", "a");
+   FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "w");
 
-   if (fp == NULL)
+   New_Person = head;
+   while (New_Person != NULL)
    {
-     printf("open failed\n");
-     return;
+      fprintf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", New_Person->name, New_Person->number, New_Person->address);
+      New_Person = New_Person->next;
    }
-
-   int i;
-   for (i = 0; i < count; i++)//배열을 차례대로
-      fprintf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n" , e[i].name, e[i].number, e[i].address);//파일에 저장
-
    fclose(fp);
 }
 
 void load()
 {
-   FILE *fp = fopen("Tel_DB.txt", "r+");  //오픈할 파일의 포인터를 할당
-
-   if (fp == NULL)
+   FILE *fp = fopen("C:\\Users\\djwls\\Desktop\\c언어 전공과제\\Tel_DB.txt", "a+");
+   count = 0;
+   New_Person = head;
+   while (New_Person != NULL)
    {
-     printf("open failed\n");
-     fp = fopen("Tel_DB.txt", "w");
-     return;
+      fscanf(fp, "Name : %s\t/\tTel : %s\t/\tAddress : %s\n", New_Person->name, New_Person->number, New_Person->address);
+      New_Person = New_Person->next;
+      count++;
    }
-
-   for (int i = 0; i < count; i++)
-    fscanf(fp, "Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n" , e[i].name, e[i].number, e[i].address);
-
-   fclose(fp);  //사용할 파일을 오픈했으면 반드시 사용후에 닫아주어야 함
+   fclose(fp);
 }
 
-int main()
+Person *New_Node(void)
 {
-   load();
-
-   while (1)
-   {
-      int num = 0;
-      num = PrintMenu();
-
-      switch (num)
-      {
-      case 1:
-         InsertDB();
-         break;
-      case 2:
-         DeleteDB();
-         break;
-      case 3:
-         SearchDB();
-         break;
-      case 4:
-         PrintDB();
-         break;
-      case 5:
-         ExitDB();
-         return 0;
-         break;
-      default:
-         printf("다시 입력하세요.[1~5]\n");
-         break;
-      }
-   }
+   return (Person*)malloc(sizeof(Person));
 }
