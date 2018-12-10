@@ -46,6 +46,11 @@ void InsertDB()
   getchar();
   scanf("%[^\n]s\n", temp->address);
 
+  // while (head->next != NULL)
+  //   head = head->next;
+  // head->next = temp;
+  // temp->next = NULL;
+
   tail->next = temp;
   tail = temp;
   temp->next = NULL;
@@ -161,6 +166,7 @@ void PrintDB()
 
   printf("[ Print All Data ]\n");
 
+  temp = temp->next;
   while (temp != NULL)
   {
     printf("Name : %-10s\t/\tTel : %-10s\t/\tAddress : %-10s\n", temp->name, temp->number, temp->address);
