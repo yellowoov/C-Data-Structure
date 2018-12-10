@@ -17,6 +17,7 @@ typedef struct Person
 }Person;
 
 Person *head = NULL;
+Person *tail = NULL;
 
 void InsertDB();
 void DeleteDB();
@@ -30,7 +31,6 @@ int PrintMenu();
 void InsertDB()
 {
   Person *temp = (Person*)malloc(sizeof(Person));
-  Person *tail = NULL;
 
   printf("[ INSERT ]\n");
 
@@ -46,8 +46,9 @@ void InsertDB()
   getchar();
   scanf("%[^\n]s\n", temp->address);
 
-  temp->next = head;
-  head = temp;
+  tail->next = temp;
+  temp = tail;
+  temp->next = NULL;
 
   printf("등록 되었습니다.\n");
 }
@@ -157,6 +158,7 @@ void SearchDB()
 void PrintDB()
 {
   Person *temp = head;
+
   printf("[ Print All Data ]\n");
 
   while (temp != NULL)
@@ -220,6 +222,9 @@ int main()
 {
    // load();
 
+   head = (Person*)malloc(sizeof(Person));
+   tail = head;
+
    while (1)
    {
       int num = 0;
@@ -248,4 +253,5 @@ int main()
          break;
       }
    }
+   free(head);
 }
